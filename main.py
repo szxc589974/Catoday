@@ -65,7 +65,7 @@ def convertAge(event):
         if event.message.text == "年齡":
             line_bot_api.reply_message(event.reply_token,TextSendMessage(text="請輸入歲數:"))
         elif event.message.text == "圖片": 
-            line_bot_api.reply_message(event.reply_token,ImageSendMessage(original_content_url='https://drive.google.com/file/d/14A9MElyhhosigX3AEn1RaxH5rhEfJ_1X/view?usp=sharing', preview_image_url='https://drive.google.com/file/d/14A9MElyhhosigX3AEn1RaxH5rhEfJ_1X/view?usp=sharing'))
+            line_bot_api.reply_message(event.reply_token,ImageSendMessage(original_content_url='https://i.imgur.com/zFmUfzB.jpg', preview_image_url='https://i.imgur.com/zFmUfzB.jpg'))
         elif type(event.message.text) :
             covert = age[int(event.message.text)-1]
             line_bot_api.reply_message(event.reply_token,TextSendMessage(text=covert))

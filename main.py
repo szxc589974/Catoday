@@ -11,6 +11,10 @@ app = Flask(__name__)
 
 import configparser
 
+age = [15,24]
+for i in range(1,19):
+    age.append(age[i]+4)
+
 # LINE 聊天機器人的基本資料
 line_bot_api = LineBotApi('onuCCvT4ps0AgZTtjpvqTWkPZMj0j4watDwDOAjhRmREPADoakKvtSx0ycjyeuATh08cxvIf+QsnlDjYJjBb2jGqWwZUBuGy2J76Pe3Wk/RlominSvkxIyFsdOHAOTKVv9+UTP2FxA3i4XbpOKjmLQdB04t89/1O/w1cDnyilFU=')
 handler = WebhookHandler('0514d217b27b5e876c1e1a4b4623b7ea')
@@ -32,13 +36,14 @@ def callback():
 
 # 學你說話
 @handler.add(MessageEvent, message=TextMessage) #如果收到文字訊息就執行下面程式碼
-def echo(event):
+def convertAge(event):
     
+    covert = int(event.message.text)*
     if event.source.user_id != "Udeadbeefdeadbeefdeadbeefdeadbeef":
         
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=event.message.text)
+            TextSendMessage(text=age[int(event.message.text)-1])
         )
 
 if __name__ == "__main__":

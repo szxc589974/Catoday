@@ -38,6 +38,7 @@ def callback():
 def echo(event):
     
     if event.source.user_id != "Udeadbeefdeadbeefdeadbeefdeadbeef":
+        
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=event.message.text)

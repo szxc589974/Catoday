@@ -34,7 +34,7 @@ def callback():
 
     return 'OK'
 
-# 學你說話
+# 轉換年齡
 @handler.add(MessageEvent, message=TextMessage) #如果收到文字訊息就執行下面程式碼
 def convertAge(event):
     
@@ -44,6 +44,17 @@ def convertAge(event):
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=covert)
+        )
+
+# 轉換年齡
+@handler.add(MessageEvent, message=ImageMessage) #如果收到文字訊息就執行下面程式碼
+def sendImage(event):
+    
+    if event.source.user_id != "Udeadbeefdeadbeefdeadbeefdeadbeef":
+        
+        line_bot_api.reply_message(
+            event.reply_token,
+            ImageSendMessage(original_content_url='https://drive.google.com/file/d/14A9MElyhhosigX3AEn1RaxH5rhEfJ_1X/view?usp=sharing', preview_image_url='https://drive.google.com/file/d/14A9MElyhhosigX3AEn1RaxH5rhEfJ_1X/view?usp=sharing')
         )
 
 if __name__ == "__main__":

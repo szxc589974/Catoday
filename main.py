@@ -5,7 +5,7 @@ from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 
-from linebot.models import MessageEvent, TextMessage, TextSendMessage
+from linebot.models import *
 
 app = Flask(__name__)
 
@@ -35,7 +35,8 @@ def callback():
     return 'OK'
 
 # 轉換年齡
-@handler.add(MessageEvent, message=TextMessage) #如果收到文字訊息就執行下面程式碼
+
+"""
 def convertAge(event):
     
     covert = age[int(event.message.text)-1]
@@ -56,6 +57,18 @@ def sendImage(event):
             event.reply_token,
             ImageSendMessage(original_content_url='https://drive.google.com/file/d/14A9MElyhhosigX3AEn1RaxH5rhEfJ_1X/view?usp=sharing', preview_image_url='https://drive.google.com/file/d/14A9MElyhhosigX3AEn1RaxH5rhEfJ_1X/view?usp=sharing')
         )
+"""
+@handler.add(MessageEvent, message=TextMessage) #如果收到文字訊息就執行下面程式碼
+def convertAge(event):
+    
+    if event.source.user_id != "Udeadbeefdeadbeefdeadbeefdeadbeef":
+        if event.message.text == "年齡":
+            line_bot_api.reply_message(event.reply_token,TextSendMessage(text="請輸入歲數:"))
+        elif event.message.text == "圖片": 
+            line_bot_api.reply_message(event.reply_token,ImageSendMessage(original_content_url='https://drive.google.com/file/d/14A9MElyhhosigX3AEn1RaxH5rhEfJ_1X/view?usp=sharing', preview_image_url='https://drive.google.com/file/d/14A9MElyhhosigX3AEn1RaxH5rhEfJ_1X/view?usp=sharing'))
+        elif type(event.message.text) :
+            covert = age[int(event.message.text)-1]
+            line_bot_api.reply_message(event.reply_token,TextSendMessage(text=covert))
 
 if __name__ == "__main__":
     app.run()

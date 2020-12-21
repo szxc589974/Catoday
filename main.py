@@ -1,6 +1,4 @@
 # 載入需要的模組
-import configparser
-
 from __future__ import unicode_literals
 import os
 from flask import Flask, request, abort
@@ -10,6 +8,8 @@ from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 
 app = Flask(__name__)
+
+import configparser
 
 # LINE 聊天機器人的基本資料
 config = configparser.ConfigParser()

@@ -38,12 +38,12 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage) #如果收到文字訊息就執行下面程式碼
 def convertAge(event):
     
-    covert = int(event.message.text)*
+    covert = age[int(event.message.text)-1]
     if event.source.user_id != "Udeadbeefdeadbeefdeadbeefdeadbeef":
         
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=age[int(event.message.text)-1])
+            TextSendMessage(text=covert)
         )
 
 if __name__ == "__main__":

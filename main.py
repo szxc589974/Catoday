@@ -22,6 +22,43 @@ app = Flask(__name__)
 
 import configparser
 
+headers = {"Authorization":"Bearer 3Ma92PMIfy790Z...","Content-Type":"application/json"}
+
+body = {
+    "size": {"width": 2500, "height": 1686},
+    "selected": "true",
+    "name": "Controller",
+    "chatBarText": "Controller",
+    "areas":[
+        {
+          "bounds": {"x": 551, "y": 325, "width": 321, "height": 321},
+          "action": {"type": "message", "text": "up"}
+        },
+        {
+          "bounds": {"x": 876, "y": 651, "width": 321, "height": 321},
+          "action": {"type": "message", "text": "right"}
+        },
+        {
+          "bounds": {"x": 551, "y": 972, "width": 321, "height": 321},
+          "action": {"type": "message", "text": "down"}
+        },
+        {
+          "bounds": {"x": 225, "y": 651, "width": 321, "height": 321},
+          "action": {"type": "message", "text": "left"}
+        },
+        {
+          "bounds": {"x": 1433, "y": 657, "width": 367, "height": 367},
+          "action": {"type": "message", "text": "btn b"}
+        },
+        {
+          "bounds": {"x": 1907, "y": 657, "width": 367, "height": 367},
+          "action": {"type": "message", "text": "btn a"}
+        }
+    ]
+  }
+
+req = requests.request('POST', 'https://api.line.me/v2/bot/richmenu', 
+                       headers=headers,data=json.dumps(body).encode('utf-8'))
 age = [15,24]
 for i in range(1,19):
     age.append(age[i]+4)
@@ -81,12 +118,12 @@ def convertAge(event):
                     preview_image_url='https://i.imgur.com/zFmUfzB.jpg'
                 )
             )
-        elif event.message.text == "醫院" : # 當使用者意圖為詢問寵物醫院時
+        elif event.message.text == "寵物醫院" : # 當使用者意圖為詢問寵物醫院時
             Button_Template = TemplateSendMessage(
                 alt_text='Please tell me where you are',
                 template=ButtonsTemplate(
-                    title='這是ButtonsTemplate',
-                    text='Please tell me where you are',
+                    title='Send Location',
+                    text='請告訴我你所在的位置!',
                     actions=[
                         URITemplateAction(
                             label='Send my location',
@@ -96,6 +133,7 @@ def convertAge(event):
                 )
             )
             line_bot_api.reply_message(event.reply_token,Button_Template)
+
         elif type(event.message.text) :
             covert = age[int(event.message.text)-1]
             line_bot_api.reply_message(

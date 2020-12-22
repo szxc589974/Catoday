@@ -74,6 +74,14 @@ def convertAge(event):
         if event.message.text == "年齡":
             line_bot_api.reply_message(event.reply_token,TextSendMessage(text="請輸入歲數:"))
         elif event.message.text == "圖片": 
+            line_bot_api.reply_message(
+                event.reply_token,
+                ImageSendMessage(
+                    original_content_url='https://i.imgur.com/zFmUfzB.jpg', 
+                    preview_image_url='https://i.imgur.com/zFmUfzB.jpg'
+                )
+            )
+        elif event.message.text == "醫院" : # 當使用者意圖為詢問寵物醫院時
             Button_Template = TemplateSendMessage(
                 alt_text='Please tell me where you are',
                 template=ButtonsTemplate(
@@ -87,26 +95,15 @@ def convertAge(event):
                     ]
                 )
             )
-            line_bot_api.reply_message(
-                event.reply_token,
-                Button_Template
-            )
-
+            line_bot_api.reply_message(event.reply_token,Button_Template)
         elif type(event.message.text) :
             covert = age[int(event.message.text)-1]
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text=covert)
             )
-        elif event.message.text == "寵物醫院": # 當使用者意圖為詢問寵物醫院時
-            # 建立一個 button 的 template
-            line_bot_api.reply_message(
-                event.reply_token,
-                ImageSendMessage(
-                    original_content_url='https://i.imgur.com/zFmUfzB.jpg', 
-                    preview_image_url='https://i.imgur.com/zFmUfzB.jpg'
-                )
-            )
+
+
 
 if __name__ == "__main__":
     app.run()

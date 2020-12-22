@@ -7,7 +7,11 @@ import random
 from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
-import linebot.models
+from linebot.models import(
+    MessageEvent, TextMessage, TextSendMessage,
+    ImageSendMessage,LocationMessage,TemplateSendMessage, 
+    ButtonsTemplate, URITemplateAction,MessageTemplateAction
+)
 
 app = Flask(__name__)
 
@@ -159,10 +163,5 @@ def handle_location_message(event):
                             uri="line://nv/location"
                         )
 
-                        (
-    MessageEvent, TextMessage, TextSendMessage,
-    ImageSendMessage,
-    LocationMessage,
-    TemplateSendMessage, ButtonsTemplate, URITemplateAction,
-)
+
 """

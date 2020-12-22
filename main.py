@@ -1,10 +1,10 @@
 # 載入需要的模組
-import apiai
+
+from __future__ import unicode_literals
+import os
 import json
 import requests
 import random
-from __future__ import unicode_literals
-import os
 from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError

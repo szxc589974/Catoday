@@ -7,13 +7,7 @@ import random
 from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
-
-from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage,
-    ImageSendMessage,
-    LocationMessage,
-    TemplateSendMessage, ButtonsTemplate, URITemplateAction,
-)
+import linebot.models
 
 app = Flask(__name__)
 
@@ -84,23 +78,24 @@ def convertAge(event):
                 event.reply_token,
                 TextSendMessage(text=covert)
             )
-        elif event.message.text == "hos": # 當使用者意圖為詢問寵物醫院時
+        elif event.message.text == "寵物醫院": # 當使用者意圖為詢問寵物醫院時
             # 建立一個 button 的 template
-            line_bot_api.reply_message(
-                event.reply_token,
-                TemplateSendMessage(
-                    alt_text="Please tell me where you are",
-                    template=ButtonsTemplate(
-                        title='這是ButtonsTemplate',
-                        text="Please tell me where you are",
-                        actions=[
-                            MessageTemplateAction(
+            Button_Template = TemplateSendMessage(
+                alt_text="Please tell me where you are",
+                template=ButtonsTemplate(
+                    title='這是ButtonsTemplate',
+                    text="Please tell me where you are",
+                    actions=[
+                        MessageTemplateAction(
                             label='ButtonsTemplate',
                             text='ButtonsTemplate'
-                            )
-                        ]
-                    )
+                        )
+                    ]
                 )
+            )
+            line_bot_api.reply_message(
+                event.reply_token,
+                Button_Template
             )
 
 if __name__ == "__main__":
@@ -163,4 +158,11 @@ def handle_location_message(event):
                             label="Send my location",
                             uri="line://nv/location"
                         )
+
+                        (
+    MessageEvent, TextMessage, TextSendMessage,
+    ImageSendMessage,
+    LocationMessage,
+    TemplateSendMessage, ButtonsTemplate, URITemplateAction,
+)
 """

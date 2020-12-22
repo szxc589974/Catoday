@@ -1,9 +1,13 @@
 # 載入需要的模組
+import apiai
+import json
+import requests
+import random
 from __future__ import unicode_literals
 import os
 from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
-from linebot.exceptions import InvalidSignatureError
+from linebot.exceptions import *
 
 from linebot.models import *
 
@@ -69,7 +73,7 @@ def convertAge(event):
         elif type(event.message.text) :
             covert = age[int(event.message.text)-1]
             line_bot_api.reply_message(event.reply_token,TextSendMessage(text=covert))
-        elif event.message.text == "寵物醫院": # 當使用者意圖為詢問午餐時
+        elif event.message.text == "寵物醫院": # 當使用者意圖為詢問寵物醫院時
             # 建立一個 button 的 template
             buttons_template_message = TemplateSendMessage(
                 alt_text="Please tell me where you are",

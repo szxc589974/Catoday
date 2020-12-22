@@ -92,9 +92,9 @@ def convertAge(event):
                     title='這是ButtonsTemplate',
                     text="Please tell me where you are",
                     actions=[
-                        URITemplateAction(
-                            label="Send my location",
-                            uri="line://nv/location"
+                        MessageTemplateAction(
+                        label='ButtonsTemplate',
+                        text='ButtonsTemplate'
                         )
                     ]
                 )
@@ -157,4 +157,8 @@ def handle_location_message(event):
         long=restaurant["geometry"]["location"]["lng"],
         place_id=restaurant["place_id"]
     )
+                            URITemplateAction(
+                            label="Send my location",
+                            uri="line://nv/location"
+                        )
 """

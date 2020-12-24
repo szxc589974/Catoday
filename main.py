@@ -4,6 +4,7 @@ import os
 import json
 import requests
 import random
+import configparser
 from flask import Flask, request, abort
 from linebot import (
     LineBotApi, WebhookHandler
@@ -20,45 +21,8 @@ from linebot.models import (
 
 app = Flask(__name__)
 
-import configparser
-
-headers = {"Authorization":"Bearer 3Ma92PMIfy790Z...","Content-Type":"application/json"}
-
-body = {
-    "size": {"width": 2500, "height": 1686},
-    "selected": "true",
-    "name": "Controller",
-    "chatBarText": "Controller",
-    "areas":[
-        {
-          "bounds": {"x": 551, "y": 325, "width": 321, "height": 321},
-          "action": {"type": "message", "text": "up"}
-        },
-        {
-          "bounds": {"x": 876, "y": 651, "width": 321, "height": 321},
-          "action": {"type": "message", "text": "right"}
-        },
-        {
-          "bounds": {"x": 551, "y": 972, "width": 321, "height": 321},
-          "action": {"type": "message", "text": "down"}
-        },
-        {
-          "bounds": {"x": 225, "y": 651, "width": 321, "height": 321},
-          "action": {"type": "message", "text": "left"}
-        },
-        {
-          "bounds": {"x": 1433, "y": 657, "width": 367, "height": 367},
-          "action": {"type": "message", "text": "btn b"}
-        },
-        {
-          "bounds": {"x": 1907, "y": 657, "width": 367, "height": 367},
-          "action": {"type": "message", "text": "btn a"}
-        }
-    ]
-  }
-
-req = requests.request('POST', 'https://api.line.me/v2/bot/richmenu', 
-                       headers=headers,data=json.dumps(body).encode('utf-8'))
+#
+#
 age = [15,24]
 for i in range(1,19):
     age.append(age[i]+4)
@@ -66,6 +30,7 @@ for i in range(1,19):
 # LINE 聊天機器人的基本資料
 line_bot_api = LineBotApi('onuCCvT4ps0AgZTtjpvqTWkPZMj0j4watDwDOAjhRmREPADoakKvtSx0ycjyeuATh08cxvIf+QsnlDjYJjBb2jGqWwZUBuGy2J76Pe3Wk/RlominSvkxIyFsdOHAOTKVv9+UTP2FxA3i4XbpOKjmLQdB04t89/1O/w1cDnyilFU=')
 handler = WebhookHandler('0514d217b27b5e876c1e1a4b4623b7ea')
+GOOGLE_API_KEY = os.environ.get('AIzaSyDMA-HQJr05I3DJHo4iNQs39rSOUi5EwMA')
 
 # 接收 LINE 的資訊
 @app.route("/callback", methods=['POST'])
@@ -81,32 +46,10 @@ def callback():
         abort(400)
 
     return 'OK'
-"""
-# 轉換年齡
-def convertAge(event):
-    
-    covert = age[int(event.message.text)-1]
-    if event.source.user_id != "Udeadbeefdeadbeefdeadbeefdeadbeef":
-        
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=covert)
-        )
 
-# 轉換年齡
-@handler.add(MessageEvent, message=ImageMessage) #如果收到文字訊息就執行下面程式碼
-def sendImage(event):
-    
-    if event.source.user_id != "Udeadbeefdeadbeefdeadbeefdeadbeef":
-        
-        line_bot_api.reply_message(
-            event.reply_token,
-            ImageSendMessage(original_content_url='https://drive.google.com/file/d/14A9MElyhhosigX3AEn1RaxH5rhEfJ_1X/view?usp=sharing', preview_image_url='https://drive.google.com/file/d/14A9MElyhhosigX3AEn1RaxH5rhEfJ_1X/view?usp=sharing')
-        )
-"""
-@handler.add(MessageEvent, message=TextMessage) #如果收到文字訊息就執行下面程式碼
+@handler.add(MessageEvent, message = TextMessage) #如果收到文字訊息就執行下面程式碼
 def convertAge(event):
-    
+
     if event.source.user_id != "Udeadbeefdeadbeefdeadbeefdeadbeef":
         if event.message.text == "年齡":
             line_bot_api.reply_message(event.reply_token,TextSendMessage(text="請輸入歲數:"))
@@ -136,24 +79,10 @@ def convertAge(event):
 
         elif type(event.message.text) :
             covert = age[int(event.message.text)-1]
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=covert)
-            )
+            line_bot_api.reply_message(event.reply_token,TextSendMessage(text=covert))
 
 
-
-if __name__ == "__main__":
-    app.run()
-
-
-#MessageEvent (信息事件)、FollowEvent (加好友事件)、UnfollowEvent (刪好友事件)、JoinEvent (加入聊天室事件)、LeaveEvent (離開聊天室事件)、MemberJoinedEvent (加入群組事件)、MemberLeftEvent (離開群組事件)
-#MessageEvent又依照信息內容再分成TextMessage、ImageMessage、VideoMessage、StickerMessage、FileMessage等等
-
-
-
-"""
-@handler.add(MessageEvent, message=LocationMessage)
+@handler.add(MessageEvent, message = LocationMessage)
 def handle_location_message(event):
     # 獲取使用者的經緯度
     lat = event.message.latitude
@@ -161,7 +90,7 @@ def handle_location_message(event):
 
     # 使用 Google API Start =========
     # 1. 搜尋附近餐廳
-    nearby_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key={}&location={},{}&rankby=distance&type=restaurant&language=zh-TW".format(GOOGLE_API_KEY, lat, long)
+    nearby_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key={}&location={},{}&rankby=distance&type=veterinary_care&language=zh-TW".format(GOOGLE_API_KEY, lat, long)
     nearby_results = requests.get(nearby_url)
     # 2. 得到最近的20間餐廳
     nearby_restaurants_dict = nearby_results.json()
@@ -199,7 +128,19 @@ def handle_location_message(event):
         long=restaurant["geometry"]["location"]["lng"],
         place_id=restaurant["place_id"]
     )
-                            
+                        
+
+if __name__ == "__main__":
+    app.run()
+
+
+#MessageEvent (信息事件)、FollowEvent (加好友事件)、UnfollowEvent (刪好友事件)、JoinEvent (加入聊天室事件)、LeaveEvent (離開聊天室事件)、MemberJoinedEvent (加入群組事件)、MemberLeftEvent (離開群組事件)
+#MessageEvent又依照信息內容再分成TextMessage、ImageMessage、VideoMessage、StickerMessage、FileMessage等等
+
+
+
+
+    
 
 
 """

@@ -94,38 +94,59 @@ def handle_location_message(event):
     # 2. 得到最近的20間醫院
     nearby_veterinary_care_dict = nearby_results.json()
     top20_veterinary_care = nearby_veterinary_care_dict["results"]
-    ## CUSTOMe choose rate >= 4
-    res_num = (len(top20_veterinary_care)) ##20
+
+        ## CUSTOMe choose rate >= 4
+    veterinary_care_num = (len(top20_veterinary_care)) ##20
     above4=[]
-    for i in range(res_num):
+    for i in range(veterinary_care_num):
         try:
-            if top20_veterinary_care[i]['rating'] > 3.9 :
+            if top20_veterinary_care[i]['rating'] > 4.2 :
                 above4.append(i)
         except:
             KeyError
+
     if len(above4) < 0:
         print('no 4 start resturant found')
-    # 3. 隨機選擇一間餐廳
-        restaurant = random.choice(top20_veterinary_care)
-    restaurant = top20_veterinary_care[random.choice(above4)]
-    # 4. 檢查餐廳有沒有照片，有的話會顯示
-    if restaurant.get("photos") is None:
+        # 3. 隨機選擇一間餐廳
+        veterinary_care = random.choice(top20_veterinary_care)
+    veterinary_care = top20_veterinary_care[random.choice(above4)]
+        # 4. 檢查餐廳有沒有照片，有的話會顯示
+    print(veterinary_care)
+    if veterinary_care.get("photos") is None:
         thumbnail_image_url = None
     else:
-        # 根據文件，最多只會有一張照片
-        photo_reference = restaurant["photos"][0]["photo_reference"]
+            # 根據文件，最多只會有一張照片
+        photo_reference = veterinary_care["photos"][0]["photo_reference"]
         thumbnail_image_url = "https://maps.googleapis.com/maps/api/place/photo?key={}&photoreference={}&maxwidth=1024".format(GOOGLE_API_KEY, photo_reference)
-    # 5. 組裝餐廳詳細資訊
-    rating = "無" if restaurant.get("rating") is None else restaurant["rating"]
-    address = "沒有資料" if restaurant.get("vicinity") is None else restaurant["vicinity"]
+        # 5. 組裝餐廳詳細資訊
+    rating = "無" if veterinary_care.get("rating") is None else veterinary_care["rating"]
+    address = "沒有資料" if veterinary_care.get("vicinity") is None else veterinary_care["vicinity"]
     details = "南瓜評分：{}\n南瓜地址：{}".format(rating, address)
 
-    # 6. 取得餐廳的 Google map 網址
+        # 6. 取得餐廳的 Google map 網址
     map_url = "https://www.google.com/maps/search/?api=1&query={lat},{long}&query_place_id={place_id}".format(
-        lat=restaurant["geometry"]["location"]["lat"],
-        long=restaurant["geometry"]["location"]["lng"],
-        place_id=restaurant["place_id"]
+        lat=veterinary_care["geometry"]["location"]["lat"],
+        long=veterinary_care["geometry"]["location"]["lng"],
+        place_id=veterinary_care["place_id"]
     )
+        # 使用 Google API End =========
+
+    # 回覆使用 Buttons Template
+    buttons_template_message = TemplateSendMessage(
+    alt_text=restaurant["name"],
+    template=ButtonsTemplate(
+            thumbnail_image_url=thumbnail_image_url,
+            title=restaurant["name"],
+            text=details,
+            actions=[
+                URITemplateAction(
+                    label='查看南瓜地圖',
+                    uri=map_url
+                ),
+            ]
+        )
+    )
+
                         
 
 if __name__ == "__main__":

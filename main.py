@@ -121,7 +121,7 @@ def handle_location_message(event):
         # 5. 組裝餐廳詳細資訊
     rating = "無" if veterinary_care.get("rating") is None else veterinary_care["rating"]
     address = "沒有資料" if veterinary_care.get("vicinity") is None else veterinary_care["vicinity"]
-    details = "南瓜評分：{}\n南瓜地址：{}".format(rating, address)
+    details = "評分：{}\n地址：{}".format(rating, address)
 
         # 6. 取得餐廳的 Google map 網址
     map_url = "https://www.google.com/maps/search/?api=1&query={lat},{long}&query_place_id={place_id}".format(
@@ -132,20 +132,22 @@ def handle_location_message(event):
         # 使用 Google API End =========
 
     # 回覆使用 Buttons Template
-    buttons_template_message = TemplateSendMessage(
-    alt_text=veterinary_care["name"],
-    template=ButtonsTemplate(
+    Button_Template = TemplateSendMessage(
+        alt_text=veterinary_care["name"],
+        template=ButtonsTemplate(
             thumbnail_image_url=thumbnail_image_url,
             title=veterinary_care["name"],
             text=details,
             actions=[
                 URITemplateAction(
-                    label='查看南瓜地圖',
+                    label='查看地圖',
                     uri=map_url
-                ),
+                )
             ]
         )
     )
+    line_bot_api.reply_message(event.reply_token,Button_Template)
+
 
                         
 

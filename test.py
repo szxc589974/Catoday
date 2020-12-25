@@ -26,18 +26,21 @@ if len(above4) < 0:
     restaurant = random.choice(top20_veterinary_care)
 restaurant = top20_veterinary_care[random.choice(above4)]
     # 4. 檢查餐廳有沒有照片，有的話會顯示
-print(restaurant)
+
 if restaurant.get("photos") is None:
     thumbnail_image_url = None
+
 else:
         # 根據文件，最多只會有一張照片
     photo_reference = restaurant["photos"][0]["photo_reference"]
     thumbnail_image_url = "https://maps.googleapis.com/maps/api/place/photo?key={}&photoreference={}&maxwidth=1024".format(GOOGLE_API_KEY, photo_reference)
     # 5. 組裝餐廳詳細資訊
+
+
 rating = "無" if restaurant.get("rating") is None else restaurant["rating"]
 address = "沒有資料" if restaurant.get("vicinity") is None else restaurant["vicinity"]
 details = "南瓜評分：{}\n南瓜地址：{}".format(rating, address)
-
+print(rating,address,details)
     # 6. 取得餐廳的 Google map 網址
 map_url = "https://www.google.com/maps/search/?api=1&query={lat},{long}&query_place_id={place_id}".format(
     lat=restaurant["geometry"]["location"]["lat"],

@@ -133,10 +133,10 @@ def handle_location_message(event):
 
     # 回覆使用 Buttons Template
     buttons_template_message = TemplateSendMessage(
-    alt_text=restaurant["name"],
+    alt_text=veterinary_care["name"],
     template=ButtonsTemplate(
             thumbnail_image_url=thumbnail_image_url,
-            title=restaurant["name"],
+            title=veterinary_care["name"],
             text=details,
             actions=[
                 URITemplateAction(

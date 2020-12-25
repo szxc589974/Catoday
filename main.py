@@ -5,6 +5,7 @@ import json
 import requests
 import random
 import configparser
+import fsm
 from flask import Flask, request, abort
 from linebot import (
     LineBotApi, WebhookHandler
@@ -51,7 +52,7 @@ def convertAge(event):
 
     if event.source.user_id != "Udeadbeefdeadbeefdeadbeefdeadbeef":
         if event.message.text == "年齡":
-            line_bot_api.reply_message(event.reply_token,TextSendMessage(text="請輸入歲數:"))
+            fsm.age()
         elif event.message.text == "圖片": 
             line_bot_api.reply_message(
                 event.reply_token,

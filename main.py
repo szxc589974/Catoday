@@ -57,7 +57,7 @@ def receiveText(event):
         elif event.message.text == "寵物醫院" : # 當使用者意圖為詢問寵物醫院時
             fsm.sendLocation(event)
         elif type(event.message.text) :
-            fsm.convertAge
+            fsm.convertAge(event)
             askage = 0
 
 @handler.add(MessageEvent, message = LocationMessage)

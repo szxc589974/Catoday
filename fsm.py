@@ -16,7 +16,7 @@ from linebot.exceptions import (
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
     ImageSendMessage,
-    LocationMessage,
+    LocationMessage,MessageTemplateAction
     TemplateSendMessage, ButtonsTemplate, URITemplateAction
 )
 

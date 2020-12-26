@@ -19,6 +19,7 @@ from linebot.models import (
     TemplateSendMessage, ButtonsTemplate, URITemplateAction
 )
 
+photoChoice = ['https://i.imgur.com/zFmUfzB.jpg','https://i.imgur.com/elFmbF3.jpg','https://i.imgur.com/DWouK24.jpg','https://i.imgur.com/4eCtfdV.jpg','https://i.imgur.com/CHSYUaw.jpg','https://i.imgur.com/fmu6mi2.jpg','https://i.imgur.com/IJb1d5D.jpg','https://i.imgur.com/NpVX1or.jpg','https://i.imgur.com/CGGsbUo.jpg','https://i.imgur.com/QwngCq5.jpg','https://i.imgur.com/Q7C2H6W.jpg','https://i.imgur.com/17WX1Cb.jpg','https://i.imgur.com/kGHEia2.jpg','https://i.imgur.com/gzcUpay.jpg','https://i.imgur.com/gzcUpay.jpg','https://i.imgur.com/MIUMTjM.jpg','https://i.imgur.com/HadFEcM.jpg','https://i.imgur.com/e5L8ZYI.jpg','https://i.imgur.com/BcjDfdq.jpg','https://i.imgur.com/qARyHTH.jpg','https://i.imgur.com/XDDfrzk.jpg','https://i.imgur.com/lGKspNb.jpg','https://i.imgur.com/GxcjzWn.jpg','https://i.imgur.com/kwA4EzR.jpg','https://i.imgur.com/4Zkd6A4.jpg','https://i.imgur.com/TyE7ssH.jpg','https://i.imgur.com/PYWGuyp.jpg','https://i.imgur.com/ddyGO9T.jpg','https://i.imgur.com/ozllp4R.jpg']
 age = [15,24]
 for i in range(1,19):
     age.append(age[i]+4)
@@ -40,8 +41,8 @@ def sendPicture(event):
     line_bot_api.reply_message(
         event.reply_token,
         ImageSendMessage(
-            original_content_url='https://i.imgur.com/zFmUfzB.jpg', 
-            preview_image_url='https://i.imgur.com/zFmUfzB.jpg'
+            original_content_url=random.choice(photoChoice), 
+            preview_image_url=random.choice(photoChoice)
         )
     )
 def sendLocation(event):

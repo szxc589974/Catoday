@@ -38,9 +38,7 @@ class TocMachine(GraphMachine):
         
     def is_going_to_choice(self,event):
         text = event.message.text
-        if text == '功能總覽':
-            return True
-        return False
+        return text.lower() == '功能總覽'
 
     def on_enter_choice(self,event):
         alt_text = '功能總覽'

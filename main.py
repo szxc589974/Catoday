@@ -113,17 +113,16 @@ mode = 0
 
 @app.route('/callback', methods=['POST'])
 def webhook_handler():
-    global mode
     signature = request.headers['X-Line-Signature']
-    # get request body as text
-    body = request.get_data(as_text=True)
-    app.logger.info(f'Request body: {body}')
 
-    # parse webhook body
+    body = request.get_data(as_text=True)
+    app.logger.info("Request body: " + body)
+
     try:
-        events = handler.parse(body, signature)
+        events = handler.handle(body, signature)
     except InvalidSignatureError:
         abort(400)
+
 
     # if event is MessageEvent and message is TextMessage, then echo text
     for event in events:

@@ -13,12 +13,7 @@ from linebot import (
 from linebot.exceptions import (
     InvalidSignatureError
 )
-from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage,
-    ImageSendMessage,
-    LocationMessage,MessageTemplateAction
-    TemplateSendMessage, ButtonsTemplate, URITemplateAction
-)
+from linebot.models import MessageEvent, TextMessage, TextSendMessage,ImageSendMessage,LocationMessage,MessageTemplateActionTemplateSendMessage, ButtonsTemplate, URITemplateAction
 
 from utils import send_text_message, send_button_message, send_image_message
 

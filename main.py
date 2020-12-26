@@ -98,7 +98,7 @@ machine = TocMachine(
     ],
     initial='user',
     auto_transitions=False,
-    show_conditions=True,
+    show_conditions=True
 )       
         
 app = Flask(__name__, static_url_path='')
@@ -178,10 +178,9 @@ def show_fsm():
     machine.get_graph().draw('fsm.png', prog='dot', format='png')
     return send_file('fsm.png', mimetype='image/png')
 
-
 if __name__ == '__main__':
-    app.run()
-
+    port = os.environ.get('PORT', 8000)
+    app.run(host='0.0.0.0', port=port, debug=True)
 
 
 

@@ -35,6 +35,7 @@ class TocMachine(GraphMachine):
 
     def __init__(self, **machine_configs):
         self.machine = GraphMachine(model=self, **machine_configs)
+        
     def is_going_to_choice(self,event):
         text = event.message.text
         if text == '功能總覽':

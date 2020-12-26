@@ -2,8 +2,9 @@ import os
 
 from linebot import LineBotApi, WebhookParser
 from linebot.models import MessageEvent, TextMessage, TextSendMessage, TemplateSendMessage, ImageCarouselColumn, ImageCarouselTemplate, URITemplateAction, ButtonsTemplate, MessageTemplateAction, ImageSendMessage
+from olami import Olami
 
-channel_access_token = os.getenv("LINE_CHANNEL_ACCESS_TOKEN", None)
+channel_access_token = os.getenv("onuCCvT4ps0AgZTtjpvqTWkPZMj0j4watDwDOAjhRmREPADoakKvtSx0ycjyeuATh08cxvIf+QsnlDjYJjBb2jGqWwZUBuGy2J76Pe3Wk/RlominSvkxIyFsdOHAOTKVv9+UTP2FxA3i4XbpOKjmLQdB04t89/1O/w1cDnyilFU=", None)
 
 def send_text_message(reply_token, text):
     line_bot_api = LineBotApi(channel_access_token)
@@ -11,6 +12,11 @@ def send_text_message(reply_token, text):
 
     return "OK"
 
+def send_text_message_AI(reply_token, text):
+    line_bot_api = LineBotApi(channel_access_token)
+    line_bot_api.reply_message(reply_token,TextSendMessage(text=Olami().nli(text)))
+
+    return "OK"
 
 def send_button_message(reply_token, alt_text, title, text, btn):
     line_bot_api = LineBotApi(channel_access_token)

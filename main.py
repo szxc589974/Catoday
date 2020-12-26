@@ -138,16 +138,31 @@ def webhook_handler():
         print(f'\nFSM STATE: {machine.state}')
         print(f'REQUEST BODY: \n{body}')
 
-        response = machine.advance(event)
+        if mode == 1:
+            if event.message.text.lower() == '功能總覽':
+                mode = 0
+                send_text_message(event.reply_token, '返回功能總覽')
+                continue
+            else:
+                send_text_message_AI(event.reply_token, event.message.text)
+                continue
+        else:
+            if event.message.text.lower() == 'chat':
+                mode = 1
+                send_text_message(event.reply_token, '進入聊天模式，隨時輸入『fitness』可返回功能總覽')
+                continue
+            else:
+                response = machine.advance(event)
+
 
         if response == False:
             if event.message.text.lower() == 'fsm':
                 send_image_message(event.reply_token, '')
-            elif machine.state != 'user' and event.message.text.lower() == '功能導覽':
-                send_text_message(event.reply_token, '輸入『功能導覽』有些功能或許能幫到您喔!。\n隨時輸入『fsm』可以得到狀態圖。')
+            elif machine.state != 'user' and event.message.text.lower() == '功能總覽':
+                send_text_message(event.reply_token, '輸入『功能總覽』有些功能或許能幫到您喔!。\n隨時輸入『chat』可以機器人聊天。\n隨時輸入『fsm』可以得到狀態圖。')
                 machine.go_back()
             elif machine.state == 'user':
-                send_text_message(event.reply_token, '輸入『功能導覽』有些功能或許能幫到您喔!。\n隨時輸入『fsm』可以得到狀態圖。')
+                send_text_message(event.reply_token, '輸入『功能總覽』有些功能或許能幫到您喔!。\n隨時輸入『chat』可以機器人聊天。\n隨時輸入『fsm』可以得到狀態圖。')
             elif machine.state == 'Q1' or machine.state == 'Q2' or machine.state == 'Q3'or machine.state == 'Q4'or machine.state == 'Q5'or machine.state == 'Q6'or machine.state == 'Q7'or machine.state == 'Q8'or machine.state == 'resultA'or machine.state == 'resultB'or machine.state == 'resultC'or machine.state == 'resultD'or machine.state == 'resultE'or machine.state == 'resultF'or machine.state == 'resultG':
                 send_text_message(event.reply_token, '請回答『是』或『否』')
             elif machine.state == 'choice':

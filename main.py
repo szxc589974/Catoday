@@ -1,12 +1,10 @@
 # 載入需要的模組
 from __future__ import unicode_literals
 import os
-import json
-import requests
-import random
+import sys
 import configparser
-import fsm
-from flask import Flask, request, abort
+from flask import Flask, request, abort, jsonify, send_file
+from dotenv import load_dotenv
 from linebot import (
     LineBotApi, WebhookHandler
 )
@@ -20,7 +18,7 @@ from linebot.models import (
     TemplateSendMessage, ButtonsTemplate, URITemplateAction
 )
 from fsm import TocMachine
-from utils import send_text_message, send_button_message, send_image_message
+from utils import send_text_message, send_button_message, send_image_message, send_text_message_AI
 
 machine = TocMachine(
     states=[
@@ -123,7 +121,7 @@ def webhook_handler():
 
     # parse webhook body
     try:
-        events = parser.parse(body, signature)
+        events = handler.parse(body, signature)
     except InvalidSignatureError:
         abort(400)
 
@@ -149,16 +147,16 @@ def webhook_handler():
         else:
             if event.message.text.lower() == 'chat':
                 mode = 1
-                send_text_message(event.reply_token, '進入聊天模式，隨時輸入『fitness』可返回功能總覽')
+                send_text_message(event.reply_token, '進入聊天模式，隨時輸入『功能總覽』可返回功能總覽')
                 continue
             else:
                 response = machine.advance(event)
 
 
         if response == False:
-            if event.message.text.lower() == 'fsm':
-                send_image_message(event.reply_token, '')
-            elif machine.state != 'user' and event.message.text.lower() == '功能總覽':
+#            if event.message.text.lower() == 'fsm':
+#                send_image_message(event.reply_token, '')
+            if machine.state != 'user' and event.message.text.lower() == '功能總覽':
                 send_text_message(event.reply_token, '輸入『功能總覽』有些功能或許能幫到您喔!。\n隨時輸入『chat』可以機器人聊天。\n隨時輸入『fsm』可以得到狀態圖。')
                 machine.go_back()
             elif machine.state == 'user':

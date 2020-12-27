@@ -34,7 +34,8 @@ class TocMachine(GraphMachine):
         return text == '功能總覽'
 
     def on_enter_choice(self,event):
-
+        line_bot_api.reply_message(reply_token, TextSendMessage(text='on enter choice'))
+        """
         alt_text = '功能總覽'
         title = '功能總覽'
         text = '請選擇以下功能:'
@@ -57,6 +58,7 @@ class TocMachine(GraphMachine):
             )
         ]
         send_button_message(event.reply_token,alt_text, title, text, btn)
+        """
 
 
     def is_going_to_input_age(self,event):

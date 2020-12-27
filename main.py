@@ -159,8 +159,8 @@ def webhook_handler():
 
 
         if response == False:
-#            if event.message.text.lower() == 'fsm':
-#                send_image_message(event.reply_token, '')
+            if event.message.text.lower() == 'fsm':
+                send_image_message(event.reply_token, 'https://i.imgur.com/42nehEl.png')
             if machine.state != 'user' and event.message.text.lower() == '重新開始':
                 send_text_message(event.reply_token, '輸入『功能總覽』有些功能或許能幫到您喔!。\n隨時輸入『fsm』可以得到狀態圖。')
                 machine.go_back()

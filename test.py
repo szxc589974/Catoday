@@ -37,4 +37,8 @@ machine = TocMachine(
 )       
 
 
-
+def main():
+    response = machine()
+    
+if __name__ == '__main__':
+    main()

@@ -116,9 +116,7 @@ if channel_access_token is None:
 line_bot_api = LineBotApi(channel_access_token)
 parser = WebhookParser(channel_secret)
 # LINE 聊天機器人的基本資料
-#line_bot_api = LineBotApi('onuCCvT4ps0AgZTtjpvqTWkPZMj0j4watDwDOAjhRmREPADoakKvtSx0ycjyeuATh08cxvIf+QsnlDjYJjBb2jGqWwZUBuGy2J76Pe3Wk/RlominSvkxIyFsdOHAOTKVv9+UTP2FxA3i4XbpOKjmLQdB04t89/1O/w1cDnyilFU=')
-#handler = WebhookHandler('0514d217b27b5e876c1e1a4b4623b7ea')
-#GOOGLE_API_KEY = 'AIzaSyDMA-HQJr05I3DJHo4iNQs39rSOUi5EwMA'
+
 
 @app.route("/callback", methods=["POST"])
 def callback():
@@ -172,22 +170,6 @@ def webhook_handler():
             continue
         print(f'\nFSM STATE: {machine.state}')
         print(f'REQUEST BODY: \n{body}')
-"""
-        if mode == 1:
-            if event.message.text.lower() == '功能總覽':
-                mode = 0
-                send_text_message(event.reply_token, '返回功能總覽')
-                continue
-            else:
-                send_text_message_AI(event.reply_token, event.message.text)
-                continue
-        else:
-            if event.message.text.lower() == 'chat':
-                mode = 1
-                send_text_message(event.reply_token, '進入聊天模式，隨時輸入『功能總覽』可返回功能總覽')
-                continue
-            else:
-"""
         response = machine.advance(event)
 
 
@@ -207,6 +189,8 @@ def webhook_handler():
                 send_text_message(event.reply_token, '請輸入一個整數')
             elif machine.state == 'send_location':
                 send_text_message(event.reply_token, '請傳送您的位置，謝謝!')
+            else :
+                send_text_message(event.reply_token, 'Nothing')
 
     return 'OK'
 

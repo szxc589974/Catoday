@@ -31,7 +31,7 @@ class TocMachine(GraphMachine):
         
     def is_going_to_choice(self,event):
         text = event.message.text
-        return text.lower() == '功能總覽'
+        return text == '功能總覽'
 
     def on_enter_choice(self,event):
 
@@ -264,7 +264,7 @@ class TocMachine(GraphMachine):
         return False
 
     def on_enter_Q5(self,event):
-        global isEnterQ5 = True
+        isEnterQ5 = True
         alt_text = '問題五'
         title = '問題五'
         text = '肋骨上是否有一層脂肪'
@@ -309,8 +309,8 @@ class TocMachine(GraphMachine):
         return False
 
     def on_enter_Q7(self,event):
-        global isEnterQ5 = False
-        global isEnterQ7 = True
+        on_enter_Q5.isEnterQ5 = False
+        isEnterQ7 = True
         alt_text = '問題七'
         title = '問題七'
         text = '貓咪腹部有贅肉嗎?'
@@ -333,7 +333,7 @@ class TocMachine(GraphMachine):
         return False
 
     def on_enter_Q8(self,event):
-        global isEnterQ7 = False
+        on_enter_Q7.isEnterQ7 = False
         alt_text = '問題八'
         title = '問題八'
         text = '貓咪有行動上面的問題嗎?'
@@ -387,11 +387,11 @@ class TocMachine(GraphMachine):
 
     def is_going_to_resultE(self,event):
         text = event.message.text
-        if isEnterQ5 == True:#代表是Q5的result
+        if on_enter_Q5.isEnterQ5 == True:#代表是Q5的result
             if text = '是':
                 return True
             return False
-        elif isEnterQ5 == False :#代表是Q7的result
+        elif on_enter_Q5.isEnterQ5 == False :#代表是Q7的result
             if text = '否':
                 return True
             return False
@@ -401,11 +401,11 @@ class TocMachine(GraphMachine):
 
     def is_going_to_resultF(self,event):
         text = event.message.text
-        if isEnterQ7 == True:#代表是Q7的result
+        if on_enter_Q7.isEnterQ7 == True:#代表是Q7的result
             if text = '是':
                 return True
             return False
-        elif isEnterQ7 == False :#代表是Q8的result
+        elif on_enter_Q7.isEnterQ7 == False :#代表是Q8的result
             if text = '否':
                 return True
             return False

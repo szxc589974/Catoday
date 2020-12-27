@@ -4,8 +4,7 @@ import json
 import requests
 import random
 import configparser
-import fsm
-from flask import Flask, request, abort
+from flask import Flask, jsonify, request, abort, send_file
 from linebot import (
     LineBotApi, WebhookHandler
 )

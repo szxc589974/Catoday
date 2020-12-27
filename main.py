@@ -26,7 +26,7 @@ machine = TocMachine(
         'input_age',
         'convert_age',
         'send_picture',
-        'send_location',
+        'input_lat_and_long',
         'receive_location',
         'Q1',
         'Q2',
@@ -49,9 +49,9 @@ machine = TocMachine(
         {'trigger': 'advance', 'source': 'choice', 'dest': 'Q1', 'conditions': 'is_going_to_Q1'},
         {'trigger': 'advance', 'source': 'choice', 'dest': 'input_age', 'conditions': 'is_going_to_input_age'},
         {'trigger': 'advance', 'source': 'choice', 'dest': 'send_picture', 'conditions': 'is_going_to_send_picture'},
-        {'trigger': 'advance', 'source': 'choice', 'dest': 'send_location', 'conditions': 'is_going_to_send_location'},
+        {'trigger': 'advance', 'source': 'choice', 'dest': 'input_lat_and_long', 'conditions': 'is_going_to_input_lat_and_long'},
         {'trigger': 'advance', 'source': 'input_age', 'dest': 'convert_age', 'conditions': 'is_going_to_convert_age'},
-        {'trigger': 'advance', 'source': 'send_location', 'dest': 'receive_location', 'conditions': 'is_going_to_receive_location'},
+        {'trigger': 'advance', 'source': 'input_lat_and_long', 'dest': 'receive_location', 'conditions': 'is_going_to_receive_location'},
         {'trigger': 'advance', 'source': 'Q1', 'dest': 'Q2', 'conditions': 'is_going_to_Q2'},
         {'trigger': 'advance', 'source': 'Q1', 'dest': 'Q3', 'conditions': 'is_going_to_Q3'},
         {'trigger': 'advance', 'source': 'Q2', 'dest': 'Q4', 'conditions': 'is_going_to_Q4'},
@@ -68,6 +68,16 @@ machine = TocMachine(
         {'trigger': 'advance', 'source': 'Q7', 'dest': 'resultE', 'conditions': 'is_going_to_resultE'},
         {'trigger': 'advance', 'source': 'Q8', 'dest': 'resultG', 'conditions': 'is_going_to_resultG'},
         {'trigger': 'advance', 'source': 'Q8', 'dest': 'resultF', 'conditions': 'is_going_to_resultF'},
+        {'trigger': 'advance', 'source': 'resultA','dest': 'choice', 'conditions': 'is_going_to_choice'},
+        {'trigger': 'advance', 'source': 'resultB','dest': 'choice', 'conditions': 'is_going_to_choice'},
+        {'trigger': 'advance', 'source': 'resultC','dest': 'choice', 'conditions': 'is_going_to_choice'},
+        {'trigger': 'advance', 'source': 'resultD','dest': 'choice', 'conditions': 'is_going_to_choice'},
+        {'trigger': 'advance', 'source': 'resultE','dest': 'choice', 'conditions': 'is_going_to_choice'},
+        {'trigger': 'advance', 'source': 'resultF','dest': 'choice', 'conditions': 'is_going_to_choice'},
+        {'trigger': 'advance', 'source': 'resultG','dest': 'choice', 'conditions': 'is_going_to_choice'},
+        {'trigger': 'advance', 'source': 'convert_age','dest': 'choice', 'conditions': 'is_going_to_choice'},
+        {'trigger': 'advance', 'source': 'receive_location','dest': 'choice', 'conditions': 'is_going_to_choice'},
+        {'trigger': 'advance', 'source': 'send_picture','dest': 'choice', 'conditions': 'is_going_to_choice'},
         {
             'trigger': 'go_back',
             'source': [
@@ -75,7 +85,8 @@ machine = TocMachine(
                 'input_age',
                 'convert_age',
                 'send_picture',
-                'send_location',
+                'input_lat',
+                'input_long',
                 'receive_location',
                 'Q1',
                 'Q2',
@@ -118,34 +129,6 @@ parser = WebhookParser(channel_secret)
 # LINE 聊天機器人的基本資料
 
 
-@app.route("/callback", methods=["POST"])
-def callback():
-    signature = request.headers["X-Line-Signature"]
-    # get request body as text
-    body = request.get_data(as_text=True)
-    app.logger.info("Request body: " + body)
-
-    # parse webhook body
-    try:
-        events = parser.parse(body, signature)
-    except InvalidSignatureError:
-        abort(400)
-
-    # if event is MessageEvent and message is TextMessage, then echo text
-    for event in events:
-        if not isinstance(event, MessageEvent):
-            continue
-        if not isinstance(event.message, TextMessage):
-            continue
-
-        line_bot_api.reply_message(
-            event.reply_token, TextSendMessage(text=event.message.text)
-        )
-
-    return "OK"
-
-mode = 0
-
 @app.route('/callback', methods=['POST'])
 def webhook_handler():
     global mode
@@ -162,12 +145,14 @@ def webhook_handler():
 
     # if event is MessageEvent and message is TextMessage, then echo text
     for event in events:
+        
         if not isinstance(event, MessageEvent):
             continue
         if not isinstance(event.message, TextMessage):
             continue
         if not isinstance(event.message.text, str):
             continue
+    
         print(f'\nFSM STATE: {machine.state}')
         print(f'REQUEST BODY: \n{body}')
         response = machine.advance(event)
@@ -176,31 +161,35 @@ def webhook_handler():
         if response == False:
 #            if event.message.text.lower() == 'fsm':
 #                send_image_message(event.reply_token, '')
-            if machine.state != 'user' and event.message.text.lower() == '功能總覽':
-                send_text_message(event.reply_token, '輸入『功能總覽』有些功能或許能幫到您喔!。\n隨時輸入『chat』可以機器人聊天。\n隨時輸入『fsm』可以得到狀態圖。')
+            if machine.state != 'user' and event.message.text.lower() == '重新開始':
+                send_text_message(event.reply_token, '輸入『功能總覽』有些功能或許能幫到您喔!。\n隨時輸入『fsm』可以得到狀態圖。')
+                machine.go_back()
+            elif machine.state == 'convert_age' or machine.state == 'receive_location' or machine.state == 'send_picture' :
+                send_text_message(event.reply_token, '輸入『功能總覽』有些功能或許能幫到您喔!。\n隨時輸入『fsm』可以得到狀態圖。')
                 machine.go_back()
             elif machine.state == 'user':
-                send_text_message(event.reply_token, '輸入『功能總覽』有些功能或許能幫到您喔!。\n隨時輸入『chat』可以機器人聊天。\n隨時輸入『fsm』可以得到狀態圖。')
+                send_text_message(event.reply_token, '輸入『功能總覽』有些功能或許能幫到您喔!。\n隨時輸入『fsm』可以得到狀態圖。')
             elif machine.state == 'Q1' or machine.state == 'Q2' or machine.state == 'Q3'or machine.state == 'Q4'or machine.state == 'Q5'or machine.state == 'Q6'or machine.state == 'Q7'or machine.state == 'Q8'or machine.state == 'resultA'or machine.state == 'resultB'or machine.state == 'resultC'or machine.state == 'resultD'or machine.state == 'resultE'or machine.state == 'resultF'or machine.state == 'resultG':
                 send_text_message(event.reply_token, '請回答『是』或『否』')
             elif machine.state == 'choice':
                 send_text_message(event.reply_token, '請輸入『貓咪肥胖指數』或『轉換年齡』或『想看療癒照片』或『尋找附近動物醫院』')
             elif machine.state == 'input_age':
                 send_text_message(event.reply_token, '請輸入一個整數')
-            elif machine.state == 'send_location':
-                send_text_message(event.reply_token, '請傳送您的位置，謝謝!')
+            elif machine.state == 'input_lat_and_long':
+                send_text_message(event.reply_token, '請輸入經度及緯度(請以'/'區分):')
             else :
                 send_text_message(event.reply_token, 'Nothing')
 
     return 'OK'
 
 
-@app.route('/show-fsm', methods=['GET'])
+@app.route("/show-fsm", methods=["GET"])
 def show_fsm():
-    machine.get_graph().draw('fsm.png', prog='dot', format='png')
-    return send_file('fsm.png', mimetype='image/png')
+    machine.get_graph().draw("fsm.png", prog="dot", format="png")
+    return send_file("fsm.png", mimetype="image/png")
 
 if __name__ == "__main__":
+     
     port = os.environ.get("PORT", 8000)
     app.run(host="0.0.0.0", port=port, debug=True)
 

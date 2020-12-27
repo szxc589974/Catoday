@@ -15,12 +15,14 @@ from linebot.models import MessageEvent, TextMessage, TextSendMessage,ImageSendM
 
 from utils import send_text_message, send_button_message, send_image_message
 
+
 line_bot_api = LineBotApi('onuCCvT4ps0AgZTtjpvqTWkPZMj0j4watDwDOAjhRmREPADoakKvtSx0ycjyeuATh08cxvIf+QsnlDjYJjBb2jGqWwZUBuGy2J76Pe3Wk/RlominSvkxIyFsdOHAOTKVv9+UTP2FxA3i4XbpOKjmLQdB04t89/1O/w1cDnyilFU=')
 handler = WebhookHandler('0514d217b27b5e876c1e1a4b4623b7ea')
 GOOGLE_API_KEY = 'AIzaSyDMA-HQJr05I3DJHo4iNQs39rSOUi5EwMA'
 
 photoChoice = ['https://i.imgur.com/zFmUfzB.jpg','https://i.imgur.com/elFmbF3.jpg','https://i.imgur.com/DWouK24.jpg','https://i.imgur.com/4eCtfdV.jpg','https://i.imgur.com/CHSYUaw.jpg','https://i.imgur.com/fmu6mi2.jpg','https://i.imgur.com/IJb1d5D.jpg','https://i.imgur.com/NpVX1or.jpg','https://i.imgur.com/CGGsbUo.jpg','https://i.imgur.com/QwngCq5.jpg','https://i.imgur.com/Q7C2H6W.jpg','https://i.imgur.com/17WX1Cb.jpg','https://i.imgur.com/kGHEia2.jpg','https://i.imgur.com/gzcUpay.jpg','https://i.imgur.com/gzcUpay.jpg','https://i.imgur.com/MIUMTjM.jpg','https://i.imgur.com/HadFEcM.jpg','https://i.imgur.com/e5L8ZYI.jpg','https://i.imgur.com/BcjDfdq.jpg','https://i.imgur.com/qARyHTH.jpg','https://i.imgur.com/XDDfrzk.jpg','https://i.imgur.com/lGKspNb.jpg','https://i.imgur.com/GxcjzWn.jpg','https://i.imgur.com/kwA4EzR.jpg','https://i.imgur.com/4Zkd6A4.jpg','https://i.imgur.com/TyE7ssH.jpg','https://i.imgur.com/PYWGuyp.jpg','https://i.imgur.com/ddyGO9T.jpg','https://i.imgur.com/ozllp4R.jpg']
 age = [15,24]
+
 for i in range(1,19):
     age.append(age[i]+4)
 
@@ -28,14 +30,15 @@ class TocMachine(GraphMachine):
 
     def __init__(self, **machine_configs):
         self.machine = GraphMachine(model=self, **machine_configs)
-        
+
     def is_going_to_choice(self,event):
         text = event.message.text
         return text == '功能總覽'
 
     def on_enter_choice(self,event):
-        line_bot_api.reply_message(reply_token, TextSendMessage(text='on enter choice'))
-        """
+        isEnterQ5 = False
+        isEnterQ7 = False
+        isEnterQ8 = False
         alt_text = '功能總覽'
         title = '功能總覽'
         text = '請選擇以下功能:'
@@ -58,7 +61,7 @@ class TocMachine(GraphMachine):
             )
         ]
         send_button_message(event.reply_token,alt_text, title, text, btn)
-        """
+
 
 
     def is_going_to_input_age(self,event):
@@ -72,7 +75,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_convert_age(self,event):
         text = event.message.text
-        if text.lower().isnumeric():
+        if text.isnumeric():
             return True
         return False
 
@@ -90,28 +93,28 @@ class TocMachine(GraphMachine):
     def on_enter_send_picture(self,event):
         send_image_message(event.reply_token,random.choice(photoChoice))
 
-    def is_going_to_send_location(self,event):
+    def is_going_to_input_lat_and_long(self,event):
         text = event.message.text
         if text == '尋找附近動物醫院':
             return True
         return False
 
-    def on_enter_send_location(self,event):
-        alt_text = 'Send Location'
-        title = 'Send Location'
-        text = '請告訴我你所在的位置!'
-        btn = URITemplateAction(label='Send my location',uri='line://nv/location')
-        send_button_message(event.reply_token,alt_text, title, text, btn)
+    def on_enter_input_lat_and_long(self,event):
+        line_bot_api.reply_message(event.reply_token,TextSendMessage("請輸入經度及緯度(請以'/'區分):"))
+    
     
     def is_going_to_receive_location(self,event):
-        if latitude and longitude:
+        text = event.message.text
+        lat_long = text.split("/")
+        if float(lat_long[0]) and float(lat_long[1]):
             return True
         return False
 
     def on_enter_receive_location(self,event):
-        # 獲取使用者的經緯度
-        lat = event.message.latitude
-        long = event.message.longitude
+        text = event.message.text
+        lat_long = text.split("/")
+        lat = lat_long[0]
+        long = lat_long[1]
 
         # 1. 搜尋附近寵物醫院
         nearby_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key={}&location={},{}&rankby=distance&type=veterinary_care&language=zh-TW".format(GOOGLE_API_KEY, lat, long)
@@ -154,6 +157,7 @@ class TocMachine(GraphMachine):
             long=veterinary_care["geometry"]["location"]["lng"],
             place_id=veterinary_care["place_id"]
         )
+        
         Button_Template = TemplateSendMessage(
             alt_text=veterinary_care["name"],
             template=ButtonsTemplate(
@@ -169,6 +173,7 @@ class TocMachine(GraphMachine):
             )
         )
         line_bot_api.reply_message(event.reply_token,Button_Template)
+        
 
 
     def is_going_to_Q1(self,event):
@@ -266,14 +271,13 @@ class TocMachine(GraphMachine):
         return False
 
     def on_enter_Q5(self,event):
-        isEnterQ5 = True
         alt_text = '問題五'
         title = '問題五'
         text = '肋骨上是否有一層脂肪'
         btn = [
             MessageTemplateAction(
                 label = '是',
-                text ='是' #go to E
+                text ='問題五:是' #go to E
             ),
             MessageTemplateAction(
                 label = '否',
@@ -281,6 +285,7 @@ class TocMachine(GraphMachine):
             ),
         ]
         send_button_message(event.reply_token,alt_text, title, text, btn)
+        
 
     def is_going_to_Q6(self,event):
         text = event.message.text
@@ -311,7 +316,6 @@ class TocMachine(GraphMachine):
         return False
 
     def on_enter_Q7(self,event):
-        on_enter_Q5.isEnterQ5 = False
         isEnterQ7 = True
         alt_text = '問題七'
         title = '問題七'
@@ -319,34 +323,35 @@ class TocMachine(GraphMachine):
         btn = [
             MessageTemplateAction(
                 label = '是',
-                text ='是' #go to F
+                text ='問題七:是' #go to F
             ),
             MessageTemplateAction(
                 label = '否',
-                text = '否' #go to E
+                text = '問題七:否' #go to E
             ),
         ]
         send_button_message(event.reply_token,alt_text, title, text, btn)
 
     def is_going_to_Q8(self,event):
+        isEnterQ8 = True
         text = event.message.text
         if text == '否':
             return True
         return False
 
     def on_enter_Q8(self,event):
-        on_enter_Q7.isEnterQ7 = False
+        isEnterQ7 = False
         alt_text = '問題八'
         title = '問題八'
         text = '貓咪有行動上面的問題嗎?'
         btn = [
             MessageTemplateAction(
                 label = '是',
-                text ='是' #go to G
+                text ='問題八:是' #go to G
             ),
             MessageTemplateAction(
                 label = '否',
-                text = '否' #go to F
+                text = '問題八:否' #go to F
             ),
         ]
         send_button_message(event.reply_token,alt_text, title, text, btn)
@@ -389,37 +394,31 @@ class TocMachine(GraphMachine):
 
     def is_going_to_resultE(self,event):
         text = event.message.text
-        if on_enter_Q5.isEnterQ5 == True:#代表是Q5的result
-            if text == '是':
-                return True
-            return False
-        elif on_enter_Q5.isEnterQ5 == False :#代表是Q7的result
-            if text == '否':
-                return True
-            return False
+        if text == '問題五:是': #問題五Result
+            return True
+        elif text == '問題七:否':
+            return True
+        return False
 
     def on_enter_resultE(self,event):
         line_bot_api.reply_message(event.reply_token,TextSendMessage(text="S.H.A.P.E.™ 得分：E.輕度肥胖\n您家貓的脂肪含量比理想狀態稍微偏高。\n建議：請獸醫提供建議，以確保您家的貓攝入適量的食物，避免過量餵食。此外盡量提高貓咪的運動量。"))
 
     def is_going_to_resultF(self,event):
         text = event.message.text
-        if on_enter_Q7.isEnterQ7 == True:#代表是Q7的result
-            if text == '是':
-                return True
-            return False
-        elif on_enter_Q7.isEnterQ7 == False :#代表是Q8的result
-            if text == '否':
-                return True
-            return False
+        if text == '問題七:是':#代表是Q7的result
+            return True
+        elif text == '問題八:否':#代表是Q8的result
+            return True
+        return False
 
     def on_enter_resultF(self,event):
         line_bot_api.reply_message(event.reply_token,TextSendMessage(text="S.H.A.P.E.™ 得分：F.中度肥胖\n您家貓的脂肪含量比理想狀態稍微偏高。\n建議：尋求獸醫的幫助，對您的貓咪實施適度的減肥計劃，同時提高貓咪的運動量。"))
 
     def is_going_to_resultG(self,event):
         text = event.message.text
-        if text == '是':
+        if text == '問題八:是':
             return True
         return False
 
     def on_enter_resultG(self,event):
-        line_bot_api.reply_message(event.reply_token,TextSendMessage(text="S.H.A.P.E.™ 得分：F.重度肥胖\n您家貓的脂肪含量含量超標，並且正在影響它的健康。\n建議：及時尋求獸醫的幫助，對您的貓咪實施減肥計劃。同時提高貓咪的運動量和健康水平。"))
+        line_bot_api.reply_message(event.reply_token,TextSendMessage(text="S.H.A.P.E.™ 得分：G.重度肥胖\n您家貓的脂肪含量含量超標，並且正在影響它的健康。\n建議：及時尋求獸醫的幫助，對您的貓咪實施減肥計劃。同時提高貓咪的運動量和健康水平。"))

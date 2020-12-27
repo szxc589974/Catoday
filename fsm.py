@@ -11,7 +11,7 @@ from linebot import (
 from linebot.exceptions import (
     InvalidSignatureError
 )
-from linebot.models import MessageEvent, TextMessage, TextSendMessage,ImageSendMessage,LocationMessage,MessageTemplateActionTemplateSendMessage, ButtonsTemplate, URITemplateAction
+from linebot.models import MessageEvent, TextMessage, TextSendMessage,ImageSendMessage,LocationMessage,MessageTemplateAction,TemplateSendMessage, ButtonsTemplate, URITemplateAction
 
 from utils import send_text_message, send_button_message, send_image_message
 
@@ -195,7 +195,7 @@ class TocMachine(GraphMachine):
     
     def is_going_to_Q2(self,event):
         text = event.message.text
-        if text = '是':
+        if text == '是':
             return True
         return False
 
@@ -217,7 +217,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_Q3(self,event):
         text = event.message.text
-        if text = '否':
+        if text == '否':
             return True
         return False
 
@@ -239,7 +239,7 @@ class TocMachine(GraphMachine):
         
     def is_going_to_Q4(self,event):
         text = event.message.text
-        if text = '是':
+        if text == '是':
             return True
         return False
 
@@ -261,7 +261,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_Q5(self,event):
         text = event.message.text
-        if text = '是':
+        if text == '是':
             return True
         return False
 
@@ -284,7 +284,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_Q6(self,event):
         text = event.message.text
-        if text = '否':
+        if text == '否':
             return True
         return False
 
@@ -306,7 +306,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_Q7(self,event):
         text = event.message.text
-        if text = '是':
+        if text == '是':
             return True
         return False
 
@@ -330,7 +330,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_Q8(self,event):
         text = event.message.text
-        if text = '否':
+        if text == '否':
             return True
         return False
 
@@ -353,7 +353,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_resultA(self,event):
         text = event.message.text
-        if text = '是':
+        if text == '是':
             return True
         return False
 
@@ -362,7 +362,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_resultB(self,event):
         text = event.message.text
-        if text = '否':
+        if text == '否':
             return True
         return False
 
@@ -371,7 +371,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_resultC(self,event):
         text = event.message.text
-        if text = '否':
+        if text == '否':
             return True
         return False
 
@@ -380,7 +380,7 @@ class TocMachine(GraphMachine):
     
     def is_going_to_resultD(self,event):
         text = event.message.text
-        if text = '否':
+        if text == '否':
             return True
         return False
 
@@ -390,11 +390,11 @@ class TocMachine(GraphMachine):
     def is_going_to_resultE(self,event):
         text = event.message.text
         if on_enter_Q5.isEnterQ5 == True:#代表是Q5的result
-            if text = '是':
+            if text == '是':
                 return True
             return False
         elif on_enter_Q5.isEnterQ5 == False :#代表是Q7的result
-            if text = '否':
+            if text == '否':
                 return True
             return False
 
@@ -404,11 +404,11 @@ class TocMachine(GraphMachine):
     def is_going_to_resultF(self,event):
         text = event.message.text
         if on_enter_Q7.isEnterQ7 == True:#代表是Q7的result
-            if text = '是':
+            if text == '是':
                 return True
             return False
         elif on_enter_Q7.isEnterQ7 == False :#代表是Q8的result
-            if text = '否':
+            if text == '否':
                 return True
             return False
 
@@ -417,7 +417,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_resultG(self,event):
         text = event.message.text
-        if text = '是':
+        if text == '是':
             return True
         return False
 

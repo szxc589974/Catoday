@@ -6,7 +6,7 @@ import configparser
 from flask import Flask, jsonify, request, abort, send_file
 #from dotenv import load_dotenv
 from linebot import (
-    LineBotApi, WebhookHandler
+    LineBotApi, WebhookHandler,WebhookParser
 )
 from linebot.exceptions import (
     InvalidSignatureError
@@ -67,7 +67,7 @@ machine = TocMachine(
         {'trigger': 'advance', 'source': 'Q7', 'dest': 'resultF', 'conditions': 'is_going_to_resultF'},
         {'trigger': 'advance', 'source': 'Q7', 'dest': 'resultE', 'conditions': 'is_going_to_resultE'},
         {'trigger': 'advance', 'source': 'Q8', 'dest': 'resultG', 'conditions': 'is_going_to_resultG'},
-        {'trigger': 'advance', 'source': 'Q8', 'dest': 'resultF', 'conditions': 'is_going_to_resultF'}
+        {'trigger': 'advance', 'source': 'Q8', 'dest': 'resultF', 'conditions': 'is_going_to_resultF'},
         {
             'trigger': 'go_back',
             'source': [

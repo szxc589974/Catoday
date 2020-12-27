@@ -39,4 +39,4 @@ def send_image_message(reply_token, url):
 
     return "OK"
 
-#組長->楊->賈->WE->
+#組長->楊->賈->WE->睿->徐->貝

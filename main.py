@@ -120,6 +120,32 @@ parser = WebhookParser(channel_secret)
 #handler = WebhookHandler('0514d217b27b5e876c1e1a4b4623b7ea')
 #GOOGLE_API_KEY = 'AIzaSyDMA-HQJr05I3DJHo4iNQs39rSOUi5EwMA'
 
+@app.route("/callback", methods=["POST"])
+def callback():
+    signature = request.headers["X-Line-Signature"]
+    # get request body as text
+    body = request.get_data(as_text=True)
+    app.logger.info("Request body: " + body)
+
+    # parse webhook body
+    try:
+        events = parser.parse(body, signature)
+    except InvalidSignatureError:
+        abort(400)
+
+    # if event is MessageEvent and message is TextMessage, then echo text
+    for event in events:
+        if not isinstance(event, MessageEvent):
+            continue
+        if not isinstance(event.message, TextMessage):
+            continue
+
+        line_bot_api.reply_message(
+            event.reply_token, TextSendMessage(text=event.message.text)
+        )
+
+    return "OK"
+
 mode = 0
 
 @app.route('/callback', methods=['POST'])
@@ -191,8 +217,8 @@ def show_fsm():
     return send_file('fsm.png', mimetype='image/png')
 
 if __name__ == '__main__':
-    port = os.environ.get('PORT', 8000)
-    app.run(host='0.0.0.0', port=port, debug=True)
+    #port = os.environ.get('PORT', 8000)
+    app.run()
 
 
 

@@ -34,6 +34,33 @@ class TocMachine(GraphMachine):
         return text.lower() == '功能總覽'
 
     def on_enter_choice(self,event):
+        message = TemplateSendMessage(
+            alt_text='功能總覽',
+            template = ButtonsTemplate(
+                title = '功能總覽',
+                text = '請選擇以下功能:',
+                actions = [
+                    MessageTemplateAction(
+                        label = '貓咪肥胖指數',
+                        text ='貓咪肥胖指數' #go to Q1
+                    ),
+                    MessageTemplateAction(
+                        label = '轉換年齡',
+                        text = '轉換年齡' #go to input_age
+                    ),
+                    MessageTemplateAction(
+                        label = '想看療癒照片',
+                        text = '想看療癒照片' #go to send_picture
+                    ),
+                    MessageTemplateAction(
+                        label = '尋找附近動物醫院',
+                        text = '尋找附近動物醫院' #go to send_location
+                    )
+                ]
+            )
+        )
+    line_bot_api.reply_message(reply_token, message)
+"""
         alt_text = '功能總覽'
         title = '功能總覽'
         text = '請選擇以下功能:'
@@ -56,7 +83,7 @@ class TocMachine(GraphMachine):
             )
         ]
         send_button_message(event.reply_token,alt_text, title, text, btn)
-
+"""
 
     def is_going_to_input_age(self,event):
         text = event.message.text

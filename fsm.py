@@ -1,5 +1,4 @@
 from transitions.extensions import GraphMachine
-from __future__ import unicode_literals
 import os
 import json
 import requests

@@ -3,8 +3,8 @@ from __future__ import unicode_literals
 import os
 import sys
 import configparser
-from flask import Flask, request, abort, jsonify, send_file
-from dotenv import load_dotenv
+from flask import Flask, jsonify, request, abort, send_file
+#from dotenv import load_dotenv
 from linebot import (
     LineBotApi, WebhookHandler
 )
@@ -103,23 +103,35 @@ machine = TocMachine(
         
 app = Flask(__name__, static_url_path='')
 
+# get channel_secret and channel_access_token from your environment variable
+channel_secret = os.getenv("0514d217b27b5e876c1e1a4b4623b7ea", None)
+channel_access_token = os.getenv("onuCCvT4ps0AgZTtjpvqTWkPZMj0j4watDwDOAjhRmREPADoakKvtSx0ycjyeuATh08cxvIf+QsnlDjYJjBb2jGqWwZUBuGy2J76Pe3Wk/RlominSvkxIyFsdOHAOTKVv9+UTP2FxA3i4XbpOKjmLQdB04t89/1O/w1cDnyilFU=", None)
+if channel_secret is None:
+    print("Specify LINE_CHANNEL_SECRET as environment variable.")
+    sys.exit(1)
+if channel_access_token is None:
+    print("Specify LINE_CHANNEL_ACCESS_TOKEN as environment variable.")
+    sys.exit(1)
 
+line_bot_api = LineBotApi(channel_access_token)
+parser = WebhookParser(channel_secret)
 # LINE 聊天機器人的基本資料
-line_bot_api = LineBotApi('onuCCvT4ps0AgZTtjpvqTWkPZMj0j4watDwDOAjhRmREPADoakKvtSx0ycjyeuATh08cxvIf+QsnlDjYJjBb2jGqWwZUBuGy2J76Pe3Wk/RlominSvkxIyFsdOHAOTKVv9+UTP2FxA3i4XbpOKjmLQdB04t89/1O/w1cDnyilFU=')
-handler = WebhookHandler('0514d217b27b5e876c1e1a4b4623b7ea')
-GOOGLE_API_KEY = 'AIzaSyDMA-HQJr05I3DJHo4iNQs39rSOUi5EwMA'
+#line_bot_api = LineBotApi('onuCCvT4ps0AgZTtjpvqTWkPZMj0j4watDwDOAjhRmREPADoakKvtSx0ycjyeuATh08cxvIf+QsnlDjYJjBb2jGqWwZUBuGy2J76Pe3Wk/RlominSvkxIyFsdOHAOTKVv9+UTP2FxA3i4XbpOKjmLQdB04t89/1O/w1cDnyilFU=')
+#handler = WebhookHandler('0514d217b27b5e876c1e1a4b4623b7ea')
+#GOOGLE_API_KEY = 'AIzaSyDMA-HQJr05I3DJHo4iNQs39rSOUi5EwMA'
 
 mode = 0
 
 @app.route('/callback', methods=['POST'])
 def webhook_handler():
+    global mode
     signature = request.headers['X-Line-Signature']
 
     body = request.get_data(as_text=True)
-    app.logger.info("Request body: " + body)
+    app.logger.info(f"Request body: {body}")
 
     try:
-        events = handler.handle(body, signature)
+        events = parser.parse(body, signature)
     except InvalidSignatureError:
         abort(400)
 
@@ -134,7 +146,7 @@ def webhook_handler():
             continue
         print(f'\nFSM STATE: {machine.state}')
         print(f'REQUEST BODY: \n{body}')
-
+"""
         if mode == 1:
             if event.message.text.lower() == '功能總覽':
                 mode = 0
@@ -149,7 +161,8 @@ def webhook_handler():
                 send_text_message(event.reply_token, '進入聊天模式，隨時輸入『功能總覽』可返回功能總覽')
                 continue
             else:
-                response = machine.advance(event)
+"""
+        response = machine.advance(event)
 
 
         if response == False:

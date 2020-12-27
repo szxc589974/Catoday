@@ -1,0 +1,36 @@
+graph G{
+    user -> choice [label = "advance[is_going_to_choice]"];
+    choice -> Q1 [label = "advance[is_going_to_Q1]"];
+    choice -- input_age [label = "advance[is_going_to_input_age]"];
+    choice -- send_picture [label = "advance[is_going_to_send_picture]"];
+    choice -- input_lat_and_long [label = "advance[is_going_to_input_lat_and_long]"];
+    input_age -- convert_age [label = "advance[is_going_to_convert_age]"];
+    input_lat_and_long -- receive_location [label = "advance[is_going_to_receive_location]"];
+    Q1 -- Q2 [label = "advance[is_going_to_Q2]"];
+    Q1 -- Q3 [label = "advance[is_going_to_Q3]"];
+    Q2 -- Q4 [label = "advance[is_going_to_Q4]"];
+    Q2 -- resultC [label = "advance[is_going_to_resultC]"];
+    Q3 -- Q5 [label = "advance[is_going_to_Q5]"];
+    Q3 -- Q6 [label = "advance[is_going_to_Q6]"];
+    Q4 -- resultA [label = "advance[is_going_to_resultA]"];
+    Q4 -- resultB [label = "advance[is_going_to_resultB]"];
+    Q5 -- resultE [label = "advance[is_going_to_resultE]"];
+    Q5 -- resultD [label = "advance[is_going_to_resultD]"];
+    Q6 -- Q7 [label = "advance[is_going_to_Q7]"];
+    Q6 -- Q8 [label = "advance[is_going_to_Q8]"];
+    Q7 -- resultF [label = "advance[is_going_to_resultF]"];
+    Q7 -- resultE [label = "advance[is_going_to_resultE]"];
+    Q8 -- resultG [label = "advance[is_going_to_resultG]"];
+    Q8 -- resultF [label = "advance[is_going_to_resultF]"];
+    resultA -- choice [label = "advance[is_going_to_choice]"];
+    resultB -- choice [label = "advance[is_going_to_choice]"];
+    resultC -- choice [label = "advance[is_going_to_choice]"];
+    resultD -- choice [label = "advance[is_going_to_choice]"];
+    resultE -- choice [label = "advance[is_going_to_choice]"];
+    resultF -- choice [label = "advance[is_going_to_choice]"];
+    resultG -- choice [label = "advance[is_going_to_choice]"];
+    convert_age -- choice [label = "advance[is_going_to_choice]"];
+    receive_location -- choice [label = "advance[is_going_to_choice]"];
+    send_picture -- choice [label = "advance[is_going_to_choice]"];
+}        
+        

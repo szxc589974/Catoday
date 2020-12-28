@@ -32,6 +32,9 @@
           - 輸入自己的經緯度，就可以得到附近評分高的動物醫院
        
  ## 使用示範
+ - 先加入好友吧
+ ![](https://i.imgur.com/baoaDtG.png)
+ 
  - 輸入個人資訊
  ![](https://i.imgur.com/cMbkMs8.jpg)
  ![](https://i.imgur.com/PsY7AJf.jpg)
@@ -41,8 +44,8 @@
  ![](https://i.imgur.com/Y2mLOVk.jpg)
  ![](https://i.imgur.com/3DXC033.jpg)
  ![](https://i.imgur.com/5Qdiu2J.jpg)
- - fsm圖片(畫箭頭會出錯TT)
- ![](https://i.imgur.com/42nehEl.png)
+ - fsm圖片
+ ![](https://i.imgur.com/qOC6OZ7.png)
  
           
 
